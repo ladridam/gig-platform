@@ -2,13 +2,26 @@
 
 {% block content %}
   <h1>Available Workers</h1>
+
   <ul>
     {% for worker in workers %}
       <li>
-        <strong>{{ worker.name }}</strong> – 
-        {{ worker.skill }} – 
-        {{ worker.exp }} experience
+        <strong>{{ worker.name }}</strong> – {{ worker.skill }} ({{ worker.experience }})
       </li>
     {% endfor %}
   </ul>
+
+  <h2>Add New Worker</h2>
+  <form method="POST">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br>
+
+    <label>Skill:</label><br>
+    <input type="text" name="skill" required><br>
+
+    <label>Experience:</label><br>
+    <input type="text" name="experience" required><br><br>
+
+    <button type="submit">Add Worker</button>
+  </form>
 {% endblock %}

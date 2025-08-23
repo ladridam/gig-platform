@@ -1,31 +1,45 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Homepage
+# Sample job data
+jobs_data = [
+    {"title": "Delivery Assistant", "location": "Siliguri", "pay": "₹500/day"},
+    {"title": "Event Helper", "location": "Matigara", "pay": "₹700/day"}
+]
+
+# Sample worker data
+workers_data = [
+    {"name": "Ravi", "skill": "Delivery Helper", "experience": "2 years"},
+    {"name": "Anita", "skill": "Data Entry", "experience": "1 year"},
+    {"name": "Karan", "skill": "Event Setup", "experience": "3 years"}
+]
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# Jobs Page (dynamic data)
-@app.route("/jobs")
+@app.route("/jobs", methods=["GET", "POST"])
 def jobs():
-    job_list = [
-        {"title": "Delivery Helper", "duration": "5 hrs", "pay": "₹500"},
-        {"title": "Data Entry", "duration": "2 hrs", "pay": "₹300"},
-        {"title": "Event Setup Assistant", "duration": "1 day", "pay": "₹800"}
-    ]
-    return render_template("jobs.html", jobs=job_list)
+    if request.method == "POST":
+        title = request.form.get("title")
+        location = request.form.get("location")
+        pay = request.form.get("pay")
+        if title and location and pay:
+            jobs_data.append({"title": title, "location": location, "pay": pay})
+        return redirect(url_for("jobs"))
+    return render_template("jobs.html", jobs=jobs_data)
 
-# Workers Page
-@app.route("/workers")
+@app.route("/workers", methods=["GET", "POST"])
 def workers():
-    worker_list = [
-        {"name": "Ravi", "skill": "Delivery Helper", "exp": "2 yrs"},
-        {"name": "Anita", "skill": "Data Entry", "exp": "1 yr"},
-        {"name": "Karan", "skill": "Event Setup", "exp": "3 yrs"}
-    ]
-    return render_template("workers.html", workers=worker_list)
+    if request.method == "POST":
+        name = request.form.get("name")
+        skill = request.form.get("skill")
+        experience = request.form.get("experience")
+        if name and skill and experience:
+            workers_data.append({"name": name, "skill": skill, "experience": experience})
+        return redirect(url_for("workers"))
+    return render_template("workers.html", workers=workers_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
