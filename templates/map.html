@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Jobs & Workers Nearby</h2>
+  <div id="map"></div>
+
+  <style>
+    #map { height: 600px; width: 100%; }
+  </style>
+
+  <script>
+    // Data from Flask
+    var jobs = {{ jobs | tojson | safe }};
+    var workers = {{ workers | tojson | safe }};
+
+    // Default center (Silguri)
+    var center = [26.7271, 88.3953];
+    if (jobs.length > 0 && jobs[0].location) {
+      center = jobs[0].location;
+    } else if (workers.length > 0 && workers[0].location) {
+      center = workers[0].location;
+    }
+
+    // Init map
+    var map = L.map('map').setView(center, 12);
+
+    // Tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Icons
+    var workerIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -30]
+    });
+    var jobIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/190/190411.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -30]
+    });
+
+    // Add job markers
+    jobs.forEach(job => {
+      if (!job.location) return;
+      L.marker(job.location, {icon: jobIcon}).addTo(map)
+        .bindPopup(`<b>Job:</b> ${job.title}<br><b>Pay:</b> ${job.pay}`);
+    });
+
+    // Add worker markers
+    workers.forEach(worker => {
+      if (!worker.location) return;
+      L.marker(worker.location, {icon: workerIcon}).addTo(map)
+        .bindPopup(`<b>Worker:</b> ${worker.name}<br><b>Skill:</b> ${worker.skill}<br><b>Exp:</b> ${worker.experience}`);
+    });
+  </script>
+{% endblock %}

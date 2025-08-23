@@ -1,6 +1,10 @@
 {% extends "base.html" %}
-
 {% block content %}
-<h2>Welcome to Gig Platform</h2>
-<p>Find short-term gigs and work opportunities near you!</p>
+  <div class="text-center">
+    <h1>Welcome to Gig Platform</h1>
+    <p class="lead">Find jobs and workers around you in real-time.</p>
+    <a href="{{ url_for('jobs') }}" class="btn btn-primary">Browse Jobs</a>
+    <a href="{{ url_for('workers') }}" class="btn btn-secondary">Find Workers</a>
+    <a href="{{ url_for('map_view') }}" class="btn btn-success">View Map</a>
+  </div>
 {% endblock %}

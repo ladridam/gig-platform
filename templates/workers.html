@@ -1,27 +1,37 @@
 {% extends "base.html" %}
-
 {% block content %}
-  <h1>Available Workers</h1>
+  <h2>Available Workers</h2>
 
-  <ul>
+  <!-- Worker List -->
+  <ul class="list-group mb-4">
     {% for worker in workers %}
-      <li>
-        <strong>{{ worker.name }}</strong> – {{ worker.skill }} ({{ worker.experience }})
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <b>{{ worker.name }}</b><br>
+          <small>Skill: {{ worker.skill }} | Experience: {{ worker.experience }}</small>
+        </div>
+        <a href="{{ url_for('delete_worker', index=loop.index0) }}" class="btn btn-danger btn-sm">Delete</a>
       </li>
+    {% else %}
+      <li class="list-group-item">No workers available</li>
     {% endfor %}
   </ul>
 
-  <h2>Add New Worker</h2>
+  <!-- Add Worker Form -->
+  <h4>Add a Worker</h4>
   <form method="POST">
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br>
-
-    <label>Skill:</label><br>
-    <input type="text" name="skill" required><br>
-
-    <label>Experience:</label><br>
-    <input type="text" name="experience" required><br><br>
-
-    <button type="submit">Add Worker</button>
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-control" name="name" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Skill</label>
+      <input type="text" class="form-control" name="skill" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Experience</label>
+      <input type="text" class="form-control" name="experience" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Worker</button>
   </form>
 {% endblock %}

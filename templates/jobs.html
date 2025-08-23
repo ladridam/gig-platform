@@ -1,19 +1,37 @@
 {% extends "base.html" %}
-
 {% block content %}
-  <!--Job Form-->
-    <form method="POST" action="/jobs">
-        <input type="title" name="title" placeholder="Job Title" required>
-        <input type="duration" name="duration" placeholder="Duration" required>
-        <input type="pay" name="pay" placeholder="Pay" required>
-        <button type="submit">Post Job</button>
-    </form>
+  <h2>Available Jobs</h2>
+
+  <!-- Job List -->
+  <ul class="list-group mb-4">
     {% for job in jobs %}
-      <li>
-        <strong>{{ job.title }}</strong> – 
-        {{ job.duration }} – 
-        {{ job.pay }}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <b>{{ job.title }}</b><br>
+          <small>Pay: {{ job.pay }}</small>
+        </div>
+        <a href="{{ url_for('delete_job', index=loop.index0) }}" class="btn btn-danger btn-sm">Delete</a>
       </li>
+    {% else %}
+      <li class="list-group-item">No jobs available</li>
     {% endfor %}
   </ul>
+
+  <!-- Add Job Form -->
+  <h4>Add a Job</h4>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Job Title</label>
+      <input type="text" class="form-control" name="title" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Location (lat,lon)</label>
+      <input type="text" class="form-control" name="location" placeholder="26.7271, 88.3953" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Pay</label>
+      <input type="text" class="form-control" name="pay" placeholder="₹500/day" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Job</button>
+  </form>
 {% endblock %}
