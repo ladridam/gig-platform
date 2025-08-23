@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gig Matches</title>
+</head>
+<body>
+  <h1>Gig Matches</h1>
+  {% for r in results %}
+    <h3>{{ r.gig }}</h3>
+    <ul>
+      {% for w in r.workers %}
+        <li>{{ w.name }} - {{ w.distance }} km away</li>
+      {% else %}
+        <li>No matching workers found</li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+  <a href="/">Back to Home</a>
+</body>
+</html>
