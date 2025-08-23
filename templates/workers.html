@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Available Workers</h1>
+  <ul>
+    {% for worker in workers %}
+      <li>
+        <strong>{{ worker.name }}</strong> – 
+        {{ worker.skill }} – 
+        {{ worker.exp }} experience
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

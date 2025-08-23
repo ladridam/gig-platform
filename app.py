@@ -1,33 +1,31 @@
 from flask import Flask, render_template
-from geopy.distance import geodesic
 
 app = Flask(__name__)
-#Sample data
-workers = [
-    {"name": "Alice", "skills": ["plumbing", "carpentry"], "location": (40.7128, -74.0060)},  # New York
-    {"name": "Bob", "skills": ["electrical", "plumbing"], "location": (40.7522, -74.2437)},
-    {"name": "Charlie", "skills": ["carpentry", "painting"], "location": (40.8781, -74.6298)}
-]
-gigs = [
-    {"title": "Fix my sink", "required_skill": "plumbing", "location": (40.730610, -73.935242)},  # New York
-    {"title": "Paint my house", "required_skill": "painting", "location": (34.0422, -74.2539)},
-    {"title": "Build a deck", "required_skill": "carpentry", "location": (40.8481, -74.6228)}
-]
-#routes
-@app.route('/')
-def home():
-    return render_template('index.html', workers=workers, gigs=gigs)
 
-@app.route('/match')
-def match():
-    results = []
-    for gig in gigs:
-        matched_workers = []
-        for w in workers:
-            # skill check + distance within 35 km
-            if gig["skill"] in w["skills"]:
-                dist = geodesic(gig["location"], w["location"]).km
-                if dist <= 35:
-                    matched_workers.append({"name": w["name"], "distance": round(dist,2)})
-        results.append({"gig": gig["title"], "workers": matched_workers})
-    return render_template("gigs.html", results=results)
+# Homepage
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+# Jobs Page (dynamic data)
+@app.route("/jobs")
+def jobs():
+    job_list = [
+        {"title": "Delivery Helper", "duration": "5 hrs", "pay": "₹500"},
+        {"title": "Data Entry", "duration": "2 hrs", "pay": "₹300"},
+        {"title": "Event Setup Assistant", "duration": "1 day", "pay": "₹800"}
+    ]
+    return render_template("jobs.html", jobs=job_list)
+
+# Workers Page
+@app.route("/workers")
+def workers():
+    worker_list = [
+        {"name": "Ravi", "skill": "Delivery Helper", "exp": "2 yrs"},
+        {"name": "Anita", "skill": "Data Entry", "exp": "1 yr"},
+        {"name": "Karan", "skill": "Event Setup", "exp": "3 yrs"}
+    ]
+    return render_template("workers.html", workers=worker_list)
+
+if __name__ == "__main__":
+    app.run(debug=True)

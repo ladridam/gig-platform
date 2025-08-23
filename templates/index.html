@@ -1,24 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Gig Platform</title>
-</head>
-<body>
-  <h1>Welcome to Gig Platform</h1>
-  <h2>Workers</h2>
-  <ul>
-    {% for w in workers %}
-      <li>{{ w.name }} - {{ w.skills }}</li>
-    {% endfor %}
-  </ul>
+{% extends "base.html" %}
 
-  <h2>Gigs</h2>
-  <ul>
-    {% for g in gigs %}
-      <li>{{ g.title }} (needs {{ g.skill }})</li>
-    {% endfor %}
-  </ul>
-
-  <a href="/match">See Matches</a>
-</body>
-</html>
+{% block content %}
+<h2>Welcome to Gig Platform</h2>
+<p>Find short-term gigs and work opportunities near you!</p>
+{% endblock %}
