@@ -7,7 +7,8 @@ from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 from dotenv import load_dotenv
 
-load_dotenv()
+if os.environ.get('Render') is None:
+    load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
@@ -216,5 +217,5 @@ def find_available_port(start_port=5000, max_port=5050):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", find_available_port()))
-    debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
+    debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true" and os.environ.get('Render') is None
     app.run(host="0.0.0.0", port=port, debug=debug)
