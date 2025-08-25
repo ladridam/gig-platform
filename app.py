@@ -130,10 +130,15 @@ def jobs():
 
 @app.route("/delete_job/<int:id>", methods=["POST"])
 def delete_job(id):
-    job = Job.query.get_or_404(id)
-    db.session.delete(job)
-    db.session.commit()
-    flash("Job deleted successfully", "success")
+    try:
+        job = Job.query.get_or_404(id)
+        db.session.delete(job)
+        db.session.commit()
+        flash("Job deleted successfully", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash("Error deleting job", "danger")
+        app.logger.error(f"Error deleting job {id}: {str(e)}")
     return redirect(url_for("jobs"))
 
 @app.route("/workers", methods=["GET", "POST"])
