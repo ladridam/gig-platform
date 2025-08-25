@@ -3,14 +3,19 @@
   <h2>Available Jobs</h2>
 
   <!-- Job List -->
-  <ul class="list-group mb-4">
+    <ul class="list-group mb-4">
     {% for job in jobs %}
       <li class="list-group-item d-flex justify-content-between align-items-center">
         <div>
           <b>{{ job.title }}</b><br>
           <small>Pay: {{ job.pay }}</small>
         </div>
-        <a href="{{ url_for('delete_job', index=loop.index0) }}" class="btn btn-danger btn-sm">Delete</a>
+        <form action="{{ url_for('delete_job', id=job.id) }}" method="POST" style="display: inline;">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this job?')">
+            <i class="fa fa-trash"></i>
+          </button>
+        </form>
       </li>
     {% else %}
       <li class="list-group-item">No jobs available</li>
@@ -20,18 +25,49 @@
   <!-- Add Job Form -->
   <h4>Add a Job</h4>
   <form method="POST">
+    {{ form.hidden_tag() }}
+    
     <div class="mb-3">
-      <label class="form-label">Job Title</label>
-      <input type="text" class="form-control" name="title" required>
+      {{ form.title.label(class="form-label") }}
+      {{ form.title(class="form-control") }}
+      {% if form.title.errors %}
+        <div class="text-danger">
+          {% for error in form.title.errors %}
+            <small>{{ error }}</small>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
+    
     <div class="mb-3">
-      <label class="form-label">Location (lat,lon)</label>
-      <input type="text" class="form-control" name="location" placeholder="26.7271, 88.3953" required>
+      {{ form.location.label(class="form-label") }}
+      {{ form.location(class="form-control", placeholder="e.g., Siliguri, West Bengal") }}
+      <div class="form-text">Enter a street address, city name, or famous landmark</div>
+      {% if form.location.errors %}
+        <div class="text-danger">
+          {% for error in form.location.errors %}
+            <small>{{ error }}</small>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
+    
+    <!-- Hidden inputs for coordinates -->
+    <input type="hidden" name="lat" id="location-lat">
+    <input type="hidden" name="lng" id="location-lng">
+    
     <div class="mb-3">
-      <label class="form-label">Pay</label>
-      <input type="text" class="form-control" name="pay" placeholder="₹500/day" required>
+      {{ form.pay.label(class="form-label") }}
+      {{ form.pay(class="form-control", placeholder="₹500/day") }}
+      {% if form.pay.errors %}
+        <div class="text-danger">
+          {% for error in form.pay.errors %}
+            <small>{{ error }}</small>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
+    
     <button type="submit" class="btn btn-primary">Add Job</button>
   </form>
 {% endblock %}
