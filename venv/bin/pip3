@@ -1,4 +1,4 @@
-#!/Users/rhythm/Desktop/gig-platform/venv/bin/python3
+#!/Users/rhythm/Desktop/gig-platform/venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys
