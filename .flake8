@@ -1,0 +1,40 @@
+[flake8]
+# Line length
+max-line-length = 88
+
+# Ignore these errors
+extend-ignore = 
+    E203,  # whitespace before ':' (conflicts with Black)
+    W503,  # line break before binary operator (conflicts with Black)
+    E501,  # line too long (handled by Black)
+    C901,  # too complex (we'll handle complexity separately)
+
+# Exclude directories
+exclude = 
+    .venv,
+    venv,
+    migrations,
+    instance,
+    __pycache__,
+    .git,
+    .mypy_cache,
+    .pytest_cache,
+    build,
+    dist,
+    *.egg-info
+
+# Per-file-ignores (if needed)
+per-file-ignores = 
+    __init__.py: F401
+
+# Maximum complexity (optional)
+max-complexity = 15
+
+# Show source
+show-source = True
+
+# Statistics
+statistics = True
+
+# Import order style (pep8 or google)
+import-order-style = pep8
