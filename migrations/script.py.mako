@@ -1,5 +1,4 @@
-# Create the template file
-cat > script.py.mako << 'EOF'
+cat > migrations/script.py.mako << 'EOF'
 """${message}
 
 Revision ID: ${up_revision}

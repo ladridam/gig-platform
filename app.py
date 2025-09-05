@@ -12,8 +12,13 @@ if os.environ.get('Render') is None:
     load_dotenv()
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-template_dir = os.path.join(base_dir, 'templates')
-static_dir = os.path.join(base_dir, 'static')
+src_dir = os.path.join(base_dir, 'src')
+template_dir = os.path.join(src_dir, 'templates')  # points to src/templates/
+static_dir = os.path.join(src_dir, 'static')       # points to src/static/
+
+app = Flask(__name__, 
+           template_folder=template_dir,
+           static_folder=static_dir)
 
 app = Flask(__name__, 
            template_folder=template_dir, 
