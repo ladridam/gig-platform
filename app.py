@@ -11,7 +11,13 @@ from dotenv import load_dotenv
 if os.environ.get('Render') is None:
     load_dotenv()
 
-app = Flask(__name__)
+base_dir = os.path.dirname(os.path.abspath(__file__))
+template_dir = os.path.join(base_dir, 'templates')
+static_dir = os.path.join(base_dir, 'static')
+
+app = Flask(__name__, 
+           template_folder=template_dir, 
+           static_folder=static_dir)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///gig_platform.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
