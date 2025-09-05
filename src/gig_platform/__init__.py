@@ -1,39 +1,44 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import CSRFProtect
 from flask_migrate import Migrate
-from dotenv import load_dotenv
 import os
 
-# Load environment variables
-if os.environ.get("RENDER") is None:
-    load_dotenv()
-
+# Initialize extensions
+db = SQLAlchemy()
+csrf = CSRFProtect()
 migrate = Migrate()
 
-def create_app(config_class="gig_platform.config.Config"):
-    """Application factory function."""
-    app = Flask(__name__)
-    app.config.from_object(config_class)
-
+def create_app():
+    """Simple application factory."""
+    app = Flask(__name__, template_folder='templates', static_folder='static')
+    
+    # Basic configuration
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///gig_platform.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
     # Initialize extensions
-    from gig_platform.extensions import db, csrf
-
     db.init_app(app)
-    migrate.init_app(app, db)
     csrf.init_app(app)
-
-    # Register blueprints
-    from gig_platform.routes.main import bp as main_bp
-    from gig_platform.routes.jobs import bp as jobs_bp
-    from gig_platform.routes.workers import bp as workers_bp
-    from gig_platform.routes.map import bp as map_bp
-
+    migrate.init_app(app, db)
+    
+    # Import and register blueprints
+    from .routes.main import bp as main_bp
+    from .routes.jobs import bp as jobs_bp
+    from .routes.workers import bp as workers_bp
+    from .routes.map import bp as map_bp
+    
     app.register_blueprint(main_bp)
     app.register_blueprint(jobs_bp, url_prefix="/jobs")
     app.register_blueprint(workers_bp, url_prefix="/workers")
     app.register_blueprint(map_bp, url_prefix="/map")
-
+    
     # Initialize database
     with app.app_context():
         db.create_all()
-
+    
     return app
+
+# Create app instance
+app = create_app()

@@ -35,3 +35,9 @@ def get_debug_flag() -> bool:
     debug_env = os.environ.get("FLASK_DEBUG", "False").lower()
     render_env = os.environ.get("RENDER")
     return debug_env == "true" and render_env is None
+
+
+def ensure_directories() -> None:
+    """Ensure required directories exist."""
+    os.makedirs("instance", exist_ok=True)
+    os.makedirs("migrations/versions", exist_ok=True)
