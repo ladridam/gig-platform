@@ -44,4 +44,4 @@ def get_config() -> Config:
         "testing": TestingConfig,
     }
     
-    return config_mapping.get(env, DevelopmentConfig)
+    return config_mapping.get(env, DevelopmentConfig)()

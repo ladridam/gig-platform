@@ -1,4 +1,3 @@
-cat > migrations/script.py.mako << 'EOF'
 """${message}
 
 Revision ID: ${up_revision}
@@ -23,4 +22,3 @@ def upgrade():
 
 def downgrade():
     ${downgrades if downgrades else "pass"}
-EOF
